@@ -1,0 +1,24 @@
+# Clone repo
+git clone <repo-URL>
+
+# Start a new branch
+git checkout main
+git pull origin main
+git checkout -b <branch-name>
+
+# Work on task, then add & commit
+git add .
+git commit -m "<message>"
+
+# Pull latest main changes into branch
+git pull origin main
+
+# Push branch to GitHub
+git push origin <branch-name>
+
+# Create PR and merge on GitHub
+
+# Update local main and delete branch
+git checkout main
+git pull origin main
+git branch -D <branch-name>
