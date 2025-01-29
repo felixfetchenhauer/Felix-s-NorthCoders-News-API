@@ -1,14 +1,26 @@
 const express = require("express");
 const app = express();
-const db = require("../db/connection")
-const endpointsJSON = require("../endpoints.json")
 
-// Middleware to handle JSON responses
-app.use(express.json());
+const { 
+    getEndpoints,
+    getTopics
+ } = require("./controller");
 
-app.get("/api", (req, res, next) => {
-    console.log(endpointsJSON)
-    res.status(200).send({endpoints: endpointsJSON})
-})
+const { 
+    invalidMethod,
+    invalidEndpoint, 
+    serverError,
+    iAmATeapot 
+} = require("./error-handling");
+
+
+app.get("/api", getEndpoints);
+app.get("/api/teapot", iAmATeapot);
+app.route("/api/topics")
+  .get(getTopics)
+  .all(invalidMethod);
+
+app.use(invalidEndpoint);
+app.use(serverError);
 
 module.exports = app
