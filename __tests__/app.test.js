@@ -114,3 +114,31 @@ describe("4.GET/api/articles/:article_id", () => {
     })
   })
 });
+describe("5.GET /api/articles", () => {
+  test("200: Returns all articles in an array, sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(13);
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(String),
+            })
+          );
+        });
+        expect(new Date(articles[0].created_at).getTime()).toBeGreaterThan
+        (new Date(articles[articles.length - 1].created_at).getTime());
+      });
+  });
+});

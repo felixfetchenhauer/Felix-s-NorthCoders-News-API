@@ -6,9 +6,9 @@ exports.iAmATeapot = (req, res, next) => {
     res.status(418).send({msg: "Yorkshire tea only :)"})
 }
 
-exports.invalidEndpoint = ((req, res, next) => {
+exports.invalidEndpoint = (req, res, next) => {
     res.status(404).send({msg: "Not Found"})
-});
+};
 
 exports.MiddleWareErrors = (err, req, res, next) => {
     if (err.status) {
