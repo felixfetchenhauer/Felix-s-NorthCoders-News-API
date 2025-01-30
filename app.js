@@ -4,7 +4,8 @@ const app = express();
 const { 
     getEndpoints,
     getTopics,
-    getArticleById
+    getArticleById,
+    getArticles
  } = require("./controllers/controller");
 
 const { 
@@ -21,6 +22,7 @@ app.get("/api/teapot", iAmATeapot);
 app.route("/api/topics")
   .get(getTopics)
   .all(invalidMethod);
+app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id", getArticleById)
 app.all("/*", invalidEndpoint)
 
