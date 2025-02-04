@@ -5,7 +5,8 @@ const {
     getEndpoints,
     getTopics,
     getArticleById,
-    getArticles
+    getArticles,
+    getCommentsFromArticle
  } = require("./controllers/controller");
 
 const { 
@@ -24,6 +25,7 @@ app.route("/api/topics")
   .all(invalidMethod);
 app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id", getArticleById)
+app.get("/api/articles/:article_id/comments", getCommentsFromArticle)
 app.all("/*", invalidEndpoint)
 
 // error handling middleware \/

@@ -1,6 +1,6 @@
 exports.invalidMethod = (req, res, next) => {
     res.status(405).send({ msg: "Method Not Allowed" });
-  }
+}
 
 exports.iAmATeapot = (req, res, next) => {
     res.status(418).send({msg: "Yorkshire tea only :)"})

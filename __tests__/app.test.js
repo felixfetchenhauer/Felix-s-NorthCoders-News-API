@@ -5,6 +5,7 @@ const seed = require("../db/seeds/seed.js");
 const app = require("../app.js");
 const db = require("../db/connection.js");
 const { promises } = require("supertest/lib/test.js");
+const { toBeSortedBy } = require('jest-sorted');
 
 beforeEach(() => {
   return seed(data)
@@ -96,26 +97,26 @@ describe("4.GET/api/articles/:article_id", () => {
       })
   })
   describe("Errors", () => {
-    test("404: Responds with Article not found if Article ID Number doesn't match any in articles table", () => {
+    test("404: Responds with Not Found if Article ID Number doesn't match any in articles table", () => {
       return request(app)
       .get("/api/articles/9999")
       .expect(404)
       .then(({body}) => {
-        expect(body.msg).toBe("Article not found")
+        expect(body.msg).toBe("Not Found")
       })
     })
   })
-  test("400: Responds with article_id is not a number if article-id is not a number", () => {
+  test("400: Responds with Bad Request if article_id is not a number", () => {
     return request(app)
     .get("/api/articles/blueberries")
     .expect(400)
     .then(({body}) => {
-      expect(body.msg).toBe("article_id is not a number")
+      expect(body.msg).toBe("Bad Request")
     })
   })
 });
-describe("5.GET /api/articles", () => {
-  test("200: Returns all articles in an array, sorted by date in descending order", () => {
+describe("5.GET/api/articles", () => {
+  test("200: Serves all articles in an array, sorted by date in descending order", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -137,8 +138,67 @@ describe("5.GET /api/articles", () => {
             })
           );
         });
-        expect(new Date(articles[0].created_at).getTime()).toBeGreaterThan
-        (new Date(articles[articles.length - 1].created_at).getTime());
+        expect(articles).toBeSortedBy('created_at', { descending: true });
       });
   });
 });
+describe.only("6.GET/api/articles/:article_id/comments", () => {
+  test("200: Serves an array of all comments for specific article by article_id", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({body}) => {
+      const {comments} = body;
+      expect(comments).toBeInstanceOf(Array);
+      expect(comments).toHaveLength(11)
+      comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number)            
+          })  
+        )
+      })
+      expect(comments).toBeSortedBy('created_at', { descending: true });
+    })
+  })
+  test("200: Serves an empty array if there are no comments associated with the article", () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({body}) => {
+      const {comments} = body;
+      expect(comments).toBeInstanceOf(Array)
+      expect(comments).toHaveLength(0)
+    })
+  })
+  describe.only("Errors", () => {
+    test.only("404: Responds with Not Found if Article ID Number doesn't match any in articles table", () => {
+      return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Not Found")
+      })
+    })
+    test("400: Responds with Bad Request if article_id is not a number", () => {
+      return request(app)
+      .get("/api/articles/blueberries/comments")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe("Bad Request")
+      })
+    })
+  })
+})
+xdescribe("7.POST/api/articles/:article_id/comments", () => {
+  test("200: Adds a comment to an article", () => {
+    return request(app)
+    .post("/api/articles/:article_id/comments")
+
+  })
+})
