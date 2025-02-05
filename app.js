@@ -5,7 +5,8 @@ const {
     getEndpoints,
     getTopics,
     getArticleById,
-    getArticles
+    getArticles,
+    getCommentsFromArticle
  } = require("./controllers/controller");
 
 const { 
@@ -16,7 +17,6 @@ const {
     MiddleWareErrors
 } = require("./error-handlers/error-handling");
 
-
 app.get("/api", getEndpoints);
 app.get("/api/teapot", iAmATeapot);
 app.route("/api/topics")
@@ -24,6 +24,7 @@ app.route("/api/topics")
   .all(invalidMethod);
 app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id", getArticleById)
+app.get("/api/articles/:article_id/comments", getCommentsFromArticle)
 app.all("/*", invalidEndpoint)
 
 // error handling middleware \/
