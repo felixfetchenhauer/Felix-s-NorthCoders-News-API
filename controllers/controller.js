@@ -46,7 +46,7 @@ exports.getCommentsFromArticle = (req, res, next) => {
     checkIfArticleExists(article_id)
         .then((article) => {
             console.log(article.rows)
-            if (!article.rows) {
+            if (article.rows.length === 0) {
                 return Promise.reject({ status: 404, msg: "Not Found" });
             }
             return selectCommentsFromArticle(article_id)

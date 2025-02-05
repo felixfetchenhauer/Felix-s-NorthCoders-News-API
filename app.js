@@ -17,7 +17,6 @@ const {
     MiddleWareErrors
 } = require("./error-handlers/error-handling");
 
-
 app.get("/api", getEndpoints);
 app.get("/api/teapot", iAmATeapot);
 app.route("/api/topics")

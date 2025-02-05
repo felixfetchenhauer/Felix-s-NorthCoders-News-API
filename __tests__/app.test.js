@@ -75,7 +75,7 @@ describe("3.GET/api/topics", () => {
       })
     })
   })  
-})
+});
 describe("4.GET/api/articles/:article_id", () => {
   test("200: Serves a single article object by article_id", () => {
     return request(app)
@@ -142,7 +142,7 @@ describe("5.GET/api/articles", () => {
       });
   });
 });
-describe.only("6.GET/api/articles/:article_id/comments", () => {
+describe("6.GET/api/articles/:article_id/comments", () => {
   test("200: Serves an array of all comments for specific article by article_id", () => {
     return request(app)
     .get("/api/articles/1/comments")
@@ -176,8 +176,8 @@ describe.only("6.GET/api/articles/:article_id/comments", () => {
       expect(comments).toHaveLength(0)
     })
   })
-  describe.only("Errors", () => {
-    test.only("404: Responds with Not Found if Article ID Number doesn't match any in articles table", () => {
+  describe("Errors", () => {
+    test("404: Responds with Not Found if Article ID Number doesn't match any in articles table", () => {
       return request(app)
       .get("/api/articles/9999/comments")
       .expect(404)
